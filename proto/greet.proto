@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package greet_service;
+
+option go_package = "pb/";
+
+message NoParam {};
+
+message HelloRequest { string name = 1; }
+
+message HelloResponse { string message = 1; }
+
+message NamesList { repeated string names = 1; }
+
+message MessagesList { repeated string messages = 1; }
+
+service GreetService {
+  // simple RPC (унарный)
+  rpc SayHello(NoParam) returns (HelloResponse);
+  // server streaming RPC (серверная потоковая передача)
+  rpc SayHelloServerStreaming(NamesList) returns (stream HelloResponse);
+  // client streaming RPC (клиентская потоковая передача)
+  rpc SayHelloClientStreaming(stream HelloRequest) returns (MessagesList);
+  // bidirectional streaming RPC (двунаправленная потоковая передача
+  // (используется чаще всего))
+  rpc SayHelloBidirectionalStreaming(stream HelloRequest)
+      returns (stream HelloResponse);
+}
